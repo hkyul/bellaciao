@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Bella Ciao</title>
+        <style>
+            * { padding: 0; margin: 0; }
+    	    canvas { background: #eee; display: block; margin: 0 auto; }
+        </style>
+    </head>
+    <body>
+        <canvas id="myCanvas" width="1000" height="800"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas"); //캔버스
+        var ctx = canvas.getContext("2d"); 
+        var canvas_height = canvas.height; //canvas 높이
+        var canvas_width = canvas.width; //canvas 너비
+        var keysize = 200; //키의 크기(정사각형)
+        var dx = 7;
+        var dy = 7;
+        var ex = 100;
+        
+        //하단 키 그리기
+        function drawUnderKey() {
+            for(var c=0; c<4; c++){
+            var keyX = c*keysize; //반복되며 생성될 키의 x좌표(0,200,400,600)
+            ctx.beginPath(); //그리기 시작
+            ctx.rect(keyX, canvas_height-keysize, keysize, keysize); //사각형(시작x,시작y,가로,세로)
+            ctx.fillStyle = "#0095DD"; //사각형 색상
+            ctx.fill(); //색 채우기
+            ctx.lineWidth = 5; //테두리 굵기
+			ctx.strokeStyle = "#FF9900"; //테두리 색
+			ctx.stroke(); //테두리 그리기
+            ctx.closePath(); //그리기 끝
+            }
+        }
+        //오른편 키 그리기
+        function drawUpKey() {
+            for(var c=0; c<3; c++){
+            var keyY = c*keysize //반복되며 생성될 키의 y좌표(0,200,600)
+            ctx.beginPath(); //그리기 시작
+            ctx.rect(canvas_width-keysize, keyY, keysize, keysize); //사각형(시작x,시작y,가로,세로)
+            ctx.fillStyle = "#0095DD"; //사각형 색상
+            ctx.fill(); //색 채우기
+            ctx.lineWidth = 5; //테두리 굵기
+			ctx.strokeStyle = "#FF9900"; //테두리 색
+			ctx.stroke(); //테두리 그리기
+            ctx.closePath(); //그리기 끝
+            }
+        }
+        //내려가는 노트
+        function drawUnderNote()
+        {
+            var a = Math.floor(Math.random() * 3);
+            var b =[100,300,500,700];
+            
+            ctx.beginPath(); //그리기 시작
+            ctx.arc(b[a], ex+dy, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            //ctx.arc(300, 100, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            //ctx.arc(500, 100, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            //ctx.arc(700, 100, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            ctx.fillStyle = "#0095DD"; //색상 
+            ctx.fill(); //색 채우기
+            ctx.closePath(); //그리기 끝
+            dy++;
+        }
+        //우로가는 노트
+        function drawUpNote()
+        {
+            ctx.beginPath(); //그리기 시작
+            ctx.arc(100, 100, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            ctx.arc(100, 300, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            ctx.arc(100, 500, 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+            ctx.fillStyle = "#B0E0E6"; //색상 
+            ctx.fill(); //색 채우기
+            ctx.closePath(); //그리기 끝
+        }
+
+        //인게임 update기능
+        function draw_gamedis(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height); //이전 켄버스자국 지우기.
+            drawUnderKey(); //하단 키 그리기
+            drawUpKey(); //캔버스 오른편 세로 키그리기
+            drawUnderNote();
+            drawUpNote();
+
+        }setInterval(draw_gamedis, 10);
+    </script>
+    </body>
+</html>
