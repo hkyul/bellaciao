@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Bella Ciao</title>
+        <style>
+            * { padding: 0; margin: 0; }
+    	    canvas { background: #eee; display: block; margin: 0 auto; }
+        </style>
+    </head>
+    <body>
+        <canvas id="myCanvas" width="1000" height="800"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas"); //캔버스
+        var ctx = canvas.getContext("2d");  //캔버스렌더링
+        var canvas_height = canvas.height; //canvas 높이
+        var canvas_width = canvas.width; //canvas 너비
+        var keysize = 200; //키의 크기(정사각형)
+        var obj = []; //각 노트들이 저장되는 배열(세로/위 우선)
+        var score = 0; //점수
+        
+        //하단 키 그리기
+        function drawUnderKey() {
+            for(var c=0; c<4; c++){
+            var keyX = c*keysize; //반복되며 생성될 키의 x좌표(0,200,400,600)
+            ctx.beginPath(); //그리기 시작
+            ctx.rect(keyX, canvas_height-keysize, keysize, keysize); //사각형(시작x,시작y,가로,세로)
+            ctx.fillStyle = "#0095DD"; //사각형 색상
+            ctx.fill(); //색 채우기
+            ctx.lineWidth = 5; //테두리 굵기
+			ctx.strokeStyle = "#FF9900"; //테두리 색
+			ctx.stroke(); //테두리 그리기
+            ctx.closePath(); //그리기 끝
+            }
+        }
+        //오른편 키 그리기
+        function drawUpKey() {
+            for(var c=0; c<3; c++){
+            var keyY = c*keysize //반복되며 생성될 키의 y좌표(0,200,600)
+            ctx.beginPath(); //그리기 시작
+            ctx.rect(canvas_width-keysize, keyY, keysize, keysize); //사각형(시작x,시작y,가로,세로)
+            ctx.fillStyle = "#0095DD"; //사각형 색상
+            ctx.fill(); //색 채우기
+            ctx.lineWidth = 5; //테두리 굵기
+			ctx.strokeStyle = "#FF9900"; //테두리 색
+			ctx.stroke(); //테두리 그리기
+            ctx.closePath(); //그리기 끝
+            }
+        }
+        //점수판 그리기
+        function drawScore(){
+            ctx.font = "25px Arial"; //font 타입에서 크기와 타입설정
+            ctx.fillStyle = "#0095DD"; //글꼴색상지정
+            ctx.fillText("Score: "+score, 850, 700); //배치될 텍스트와 위치(x,y)
+        }
+        //노트그리기
+        function drawNote()
+        {
+            var noteX = [100,300,500,700]; //각 note의 x좌표들
+            var noteY = [100,300,500]; //각 note의 y좌표들
+            for(var i=0; i<4; i++){
+                for(var j=0; j<3; j++){
+                        ctx.beginPath(); //그리기 시작
+                        ctx.arc(noteX[i], noteY[j], 30, 0, Math.PI*2, false); //원그리기(x,y,반지름,그리는방향)
+                        //1일경우 레드노트 0일경우 일반노트 생성
+                        if(Math.floor( Math.random() * 2) == 1){
+                            ctx.fillStyle = "#DC143C";
+                        }else{
+                        ctx.fillStyle = "#B0E0E6"; //색상 
+                        }
+                        ctx.fill(); //색 채우기
+                        ctx.closePath(); //그리기 끝
+                        obj.push(ctx); //배열에 각 노트 추가
+                    }
+                }
+            }
+        
+        //update  <노트>
+        function draw_gamedis(){
+            ctx.clearRect(0, 0, 800, 600); //이전 켄버스자국 지우기.
+            drawUnderKey(); //하단 키 그리기
+            drawUpKey(); //캔버스 오른편 세로 키그리기
+             drawNote();//노트그리기
+        }setInterval(draw_gamedis, 5000); //5초마다
+
+        //update <점수>
+        function draw2(){
+            drawScore(); //점수판 그리기
+        }setInterval(draw2, 10);
+        
+    </script>
+    </body>
+</html>
